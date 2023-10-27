@@ -17,8 +17,8 @@ func NewRepository(db *sqlx.DB) Repository {
 }
 
 func (r Repository) Create(ctx context.Context, ce *xmcompany.Company) error {
-	q := `INSERT INTO company (ID, Name, Description, EmployeesAmount, Registered, Type) 
-		VALUES (:id, :name, :desc, :empAmount, registered, type) RETURNING companyID;`
+	q := `INSERT INTO company (ID, Name, Description, Employees_Amount, Registered, Type) 
+		VALUES (:id, :name, :description, :employees_amount, registered, type) RETURNING companyID;`
 	rows, err := r.Db.NamedQueryContext(ctx, q, ce)
 	if err != nil {
 		return db.Handle(err)
@@ -30,5 +30,18 @@ func (r Repository) Create(ctx context.Context, ce *xmcompany.Company) error {
 			return db.Handle(err)
 		}
 	}
+	return db.Handle(err)
+}
+
+func (r Repository) Update(ctx context.Context, ce xmcompany.Company) error {
+	q := `UPDATE company SET 
+                	ID = :id, 
+                	Name = :name, 
+    		  		Description = :description, 
+    		  	    Employees_Amount = :employees_amount, 
+    		  	    Registered = :registered, 
+    		  	    Type = :type
+				WHERE companyID = :companyID;`
+	_, err := r.Db.NamedExecContext(ctx, q, ce)
 	return db.Handle(err)
 }
