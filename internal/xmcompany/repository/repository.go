@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"github.com/idekpas/xm-company/internal/xmcompany"
 	"github.com/idekpas/xm-company/pkg/db"
 
@@ -53,12 +54,21 @@ func (r Repository) Delete(ctx context.Context, companyID int) error {
 		return db.Handle(err)
 	}
 
-	count, err := res.RowsAffected()
+	c, err := res.RowsAffected()
 	if err != nil {
 		return db.Handle(err)
 	}
-	if count != 1 {
+	if c != 1 {
 		return db.ErrCompanyNotFound{}
 	}
 	return db.Handle(err)
+}
+
+func (r Repository) Find(ctx context.Context, companyID int) (xmcompany.Company, error) {
+	ce := xmcompany.Company{}
+	q := fmt.Sprintf(
+		"SELECT * FROM company WHERE companyID = (?);",
+	)
+	err := r.Db.GetContext(ctx, &ce, q, companyID)
+	return ce, db.Handle(err)
 }
