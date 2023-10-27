@@ -45,3 +45,20 @@ func (r Repository) Update(ctx context.Context, ce xmcompany.Company) error {
 	_, err := r.Db.NamedExecContext(ctx, q, ce)
 	return db.Handle(err)
 }
+
+func (r Repository) Delete(ctx context.Context, companyID int) error {
+	q := `DELETE FROM company WHERE companyID = (?);`
+	res, err := r.Db.ExecContext(ctx, q, companyID)
+	if err != nil {
+		return db.Handle(err)
+	}
+
+	count, err := res.RowsAffected()
+	if err != nil {
+		return db.Handle(err)
+	}
+	if count != 1 {
+		return db.ErrCompanyNotFound{}
+	}
+	return db.Handle(err)
+}
