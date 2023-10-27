@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-type request struct {
+type createRequest struct {
 	ID              uuid.UUID             `json:"id"`
 	Name            string                `json:"name"`
 	Description     string                `json:"description"`
@@ -16,14 +16,14 @@ type request struct {
 	Type            xmcompany.CompanyType `json:"type"`
 }
 
-type response struct {
+type createResponse struct {
 	CompanyID int `json:"company-id"`
 }
 
 func (s service) Create() http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := request{}
+		req := createRequest{}
 
 		err := s.decode(r, &req)
 		if err != nil {
@@ -43,6 +43,6 @@ func (s service) Create() http.HandlerFunc {
 			s.respond(w, err, 0)
 			return
 		}
-		s.respond(w, response{CompanyID: companyID}, http.StatusOK)
+		s.respond(w, createResponse{CompanyID: companyID}, http.StatusOK)
 	}
 }
