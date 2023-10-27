@@ -48,7 +48,7 @@ func (s service) Update() http.HandlerFunc {
 			return
 		}
 
-		err = s.companyService.Update(r.Context(), cs.UpdateParams{
+		c, err := s.companyService.Update(r.Context(), cs.UpdateParams{
 			CompanyID:       companyID,
 			ID:              req.ID,
 			Name:            req.Name,
@@ -61,6 +61,14 @@ func (s service) Update() http.HandlerFunc {
 			s.respond(w, err, 0)
 			return
 		}
-		s.respond(w, updateResponse{CompanyID: companyID}, http.StatusOK)
+		s.respond(w, updateResponse{
+			CompanyID:       c.CompanyID,
+			ID:              c.ID,
+			Name:            c.Name,
+			Description:     c.Description,
+			EmployeesAmount: c.EmployeesAmount,
+			Registered:      c.Registered,
+			Type:            c.Type,
+		}, http.StatusOK)
 	}
 }

@@ -18,34 +18,34 @@ type UpdateParams struct {
 	Type            *xmcompany.CompanyType `valid:"optional"`
 }
 
-func (s Service) Update(ctx context.Context, params UpdateParams) error {
+func (s Service) Update(ctx context.Context, params UpdateParams) (xmcompany.Company, error) {
 	if _, err := govalidator.ValidateStruct(params); err != nil {
-		return e.ErrArgument{Wrapped: err}
+		return xmcompany.Company{}, e.ErrArgument{Wrapped: err}
 	}
 
 	c, err := s.Get(ctx, params.CompanyID)
 	if err != nil {
-		return err
+		return xmcompany.Company{}, err
 	}
 
 	err = s.updateCompany(params, &c)
 	if err != nil {
-		return err
+		return xmcompany.Company{}, err
 	}
 
 	tx, err := s.repository.Db.BeginTxx(ctx, nil)
 	if err != nil {
-		return err
+		return xmcompany.Company{}, err
 	}
 	defer tx.Rollback()
 
 	err = s.repository.Update(ctx, c)
 	if err != nil {
-		return err
+		return xmcompany.Company{}, err
 	}
 
 	err = tx.Commit()
-	return err
+	return c, err
 }
 
 func (s Service) updateCompany(params UpdateParams, c *xmcompany.Company) error {
