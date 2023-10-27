@@ -11,7 +11,7 @@ import (
 )
 
 type getResponse struct {
-	CompanyID       int                   `json:"companyID"`
+	CompanyID       int                   `json:"company-id"`
 	ID              uuid.UUID             `json:"id"`
 	Name            string                `json:"name"`
 	Description     string                `json:"description"`
@@ -25,7 +25,7 @@ func (s service) Get() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 
-		companyID, err := strconv.Atoi(vars["companyID"])
+		companyID, err := strconv.Atoi(vars["companyid"])
 		if err != nil {
 			s.respond(w, e.ErrArgument{
 				Wrapped: errors.New("invalid company ID in url"),

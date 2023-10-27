@@ -21,7 +21,7 @@ type updateRequest struct {
 }
 
 type updateResponse struct {
-	CompanyID       int                   `json:"companyID"`
+	CompanyID       int                   `json:"company-id"`
 	ID              uuid.UUID             `json:"id"`
 	Name            string                `json:"name"`
 	Description     string                `json:"description"`
@@ -33,7 +33,7 @@ type updateResponse struct {
 func (s service) Update() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
-		companyID, err := strconv.Atoi(vars["companyID"])
+		companyID, err := strconv.Atoi(vars["companyid"])
 		if err != nil {
 			s.respond(w, e.ErrArgument{
 				Wrapped: errors.New("invalid company ID in url"),
@@ -49,6 +49,7 @@ func (s service) Update() http.HandlerFunc {
 		}
 
 		err = s.companyService.Update(r.Context(), cs.UpdateParams{
+			CompanyID:       companyID,
 			ID:              req.ID,
 			Name:            req.Name,
 			Description:     req.Description,

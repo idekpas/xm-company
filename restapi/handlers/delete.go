@@ -10,7 +10,7 @@ func (s service) Delete() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 
-		companyID, err := strconv.Atoi(vars["companyID"])
+		companyID, err := strconv.Atoi(vars["companyid"])
 		if err != nil {
 			s.respond(w, err, 0)
 			return

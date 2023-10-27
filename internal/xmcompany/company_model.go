@@ -20,7 +20,7 @@ func (ct CompanyType) IsValid() bool {
 }
 
 type Company struct {
-	CompanyID       int         `db:"companyID"`
+	CompanyID       int         `db:"companyid"`
 	ID              uuid.UUID   `db:"id"`
 	Name            string      `db:"name"`
 	Description     string      `db:"description"`

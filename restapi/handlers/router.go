@@ -12,7 +12,7 @@ func Register(r *mux.Router, lg *logrus.Logger, db *sqlx.DB) {
 	// todo: health api
 	//r.HandleFunc("/health", handler.Health())
 	r.HandleFunc("/company", handler.Create()).Methods(http.MethodPost)
-	r.HandleFunc("/company/{id}", handler.Get()).Methods(http.MethodGet)
-	r.HandleFunc("/company/{id}", handler.Update()).Methods(http.MethodPut)
-	r.HandleFunc("/company/{id}", handler.Delete()).Methods(http.MethodDelete)
+	r.HandleFunc("/company/{companyid}", handler.Get()).Methods(http.MethodGet)
+	r.HandleFunc("/company/{companyid}", handler.Update()).Methods(http.MethodPut)
+	r.HandleFunc("/company/{companyid}", handler.Delete()).Methods(http.MethodDelete)
 }

@@ -2,8 +2,8 @@ package db
 
 import (
 	"fmt"
-
-	"github.com/jmoiron/sqlx" // extension for standard go database/sql lib
+	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 )
 
 type ConfingDB struct {
